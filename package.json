@@ -1,0 +1,31 @@
+{
+  "name": "cqr-me",
+  "version": "0.0.0",
+  "description": "Have multiple env files in json/js that can be encrypted and included in version control",
+  "main": "index.js",
+  "bin": {
+    "package": "./index.js"
+  },
+  "scripts": {
+    "start": "node -r esm index.js",
+    "lint": "eslint --fix -f compact --ignore-path .gitignore ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bernardoadc/cqr-me"
+  },
+  "keywords": [],
+  "author": "Bernardo A. Dal Corno",
+  "license": "ISC",
+  "dependencies": {
+    "esm": "^3.2.25"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
+}
