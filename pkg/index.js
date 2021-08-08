@@ -1,16 +1,14 @@
-const globby = require("globby")
-const joi = require("joi")
+const globby = require('globby')
+const joi = require('joi')
 /* modules */
 const loader = require('./loader')
 
 
-function notValid (validationResult, name) {
+function checkErrors (validationResult, name) {
   if (validationResult.error) {
-    const plural = (validationResult.error.details.length > 1) ? 's' : ''
-    namify = (m) => name ? m.replace(/"value"/g, name) : m
-    console.log(`Error${plural}: ${validationResult.error.details.map(e => namify(e.message)).join('; ')}`);
-    return true
-  } else return false
+    const namify = (m) => name ? m.replace(/"value"/g, name) : m
+    throw new Error(validationResult.error.details.map(e => namify(e.message)).join('; '))
+  }
 }
 
 function initialize (gloob, options) {
@@ -18,8 +16,8 @@ function initialize (gloob, options) {
     joi.array().items(joi.string().required()),
     joi.string().required()
   )
-  if (notValid(schema.validate(gloob), 'gloob')) return false
-  if (notValid(joi.object().optional().validate(options), 'options')) return false // .min(1).allow(null)
+  checkErrors(schema.validate(gloob), 'gloob')
+  checkErrors(joi.object().optional().validate(options), 'options') // .min(1).allow(null)
 
   return loader(globby.sync(gloob), options)
 }
