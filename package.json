@@ -1,6 +1,6 @@
 {
   "name": "cqr-me",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Have multiple env files in json/js that can be encrypted and included in version control",
   "main": "index.js",
   "bin": {
@@ -18,7 +18,9 @@
   "author": "Bernardo A. Dal Corno",
   "license": "ISC",
   "dependencies": {
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "globby": "^11.0.3",
+    "joi": "^17.4.2"
   },
   "devDependencies": {
     "eslint": "^6.6.0",
