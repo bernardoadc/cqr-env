@@ -1,6 +1,6 @@
 {
   "name": "cqr-me",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Have multiple env files in json/js that can be encrypted and included in version control",
   "main": "index.js",
   "bin": {

@@ -6,7 +6,7 @@ const loader = require('./loader')
 
 function notValid (validationResult, name) {
   if (validationResult.error) {
-    const plural = (xx.details.length > 1) ? 's' : ''
+    const plural = (validationResult.error.details.length > 1) ? 's' : ''
     namify = (m) => name ? m.replace(/"value"/g, name) : m
     console.log(`Error${plural}: ${validationResult.error.details.map(e => namify(e.message)).join('; ')}`);
     return true
