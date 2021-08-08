@@ -2,11 +2,15 @@ const test = require('ava')
 const fs = require('fs')
 const { spawn } = require('child_process')
 
+
+test.before(function (t) {
+  // set key in environment variable
+  process.env.cqr_key = '1234'
+})
+
 test.serial.cb('encrypt new sensible env file', function (t) {
   // create new file
   fs.writeFileSync('tests/C/password.env.js.exposed', 'module.exports = "secret password!"')
-  // set key in environment variable
-  process.env.cqr_key = '1234'
   // encrypt file via CLI
   const s = spawn('node', ['./pkg/cli.js', 'e', 'tests/C/password.env.js.exposed', 'cqr_key'])
 
@@ -29,4 +33,10 @@ test.serial.cb('decrypt env file', function (t) {
     fs.unlinkSync('tests/C/password.env.js.exposed')
     t.end()
   })
+})
+
+test('use secret env file', function (t) {
+  const pkg = require('../index')
+  const env = pkg('tests/D/production.env.js.encrypted', { envvar: 'cqr_key' })
+  t.deepEqual(env, { production: { host: 'example.com', pw: 'abcde' }})
 })

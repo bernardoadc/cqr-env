@@ -53,7 +53,7 @@ const env = require('cqr-me')(['**/*.env.js', 'tests/A/*.env.json'])
 /* index.js */
 console.log(process.env.NODE_ENV) // 'production'
 
-const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: false )
+const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: false })
 // { host: 'example.com' }, not { production: { host: 'example.com' }}
 
 const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: 'node_env' })
@@ -90,7 +90,27 @@ const env2 = { ...Default, ...pkg(`tests/B/${process.env.NODE_ENV}.env.js`, { na
 1. Add `*.exposed` to .gitignore to prevent any decrypted/unsafe files to be committed.
 2. Create a file with desired name and extension + `.exposed`. Fill sensible information.
 3. Set password key in environment variable. E.g.: `setx proj_key 1234` or `export proj_key=1234`
-4. Encrypt file(s) using `cqr-me e "gloob" "key_name"`
+4. Encrypt file(s) using `cqr-me e "gloob" "key_name"` (files must end with .exposed)
+
+### Decrypt env files (for editing)
+
+1. Decrypt file(s) using `cqr-me d "gloob" "key_name"` (files must end with .encrypted)
+
+### Decrypt and load env files on-the-fly
+
+```js
+📂 Project
+├ 📄 production.env.js.encrypted   // 790ffd1b2e51f77aa5621331dfd4dbec586d4276076c2129562cd2baef4fbb937574ab2b9416b9e06b5bf9d273f7a5f8P7PhoZco+zGRQJnddS7VwmTxZr6gd+4jwCsp1yLG0ck+RzoRXgExT/3tvMgwGp0AVJ8MFtcsybRNbuv6dq0RM4HmAIwQCDi5con96O8YjyAmKlsBj2G1nDb1GZ7iBD2EWX8w9GlRop6b12H5FyxxLB9BUGYcdg83vTW5s3+PgNZ9Mlx2LFLZiApn4DR91GOsB13wgCoy/7CZa+6wOiguIOtw+H1pGWunmJmi8NR3HGhbJp7Gmj4b6URAFuUgg0FGKUY2JCLQfLM4ogSE3QbSZwlzQZ5mawRrNm8PhPrG0+RXozyClYo3e0SsZeqdVimL
+└ 📄 index.js
+```
+
+```js
+/* index.js */
+console.log(process.env.NODE_ENV) // 'production'
+
+const env = require('cqr-me')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, envvar: 'key_name' } )
+// { host: 'example.com', pw: 'abcde' }
+```
 
 ## Options
 

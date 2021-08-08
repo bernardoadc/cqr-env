@@ -14,7 +14,10 @@ function initialize (gloob, options = {}) {
   checkErrors(require('./gloob.schema').validate(gloob), 'gloob')
   checkErrors(require('./options.schema').validate(options), 'options')
 
-  return loader(globby.sync(gloob), options)
+  const files = globby.sync(gloob)
+  if (!files.length) throw new Error('No files were matched')
+
+  return loader(files, options)
 }
 
 

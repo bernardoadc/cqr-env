@@ -16,8 +16,11 @@ function initialize (argv) {
   checkErrors(require('./gloob.schema').validate(gloob), 'gloob')
   checkErrors(require('./envvar.schema').validate(envvar), 'envvar')
 
-  if (mode == 'e') cryptor.encrypt(globby.sync(gloob), envvar)
-  else if (mode == 'd') cryptor.decrypt(globby.sync(gloob), envvar)
+  const files = globby.sync(gloob)
+  if (!files.length) throw new Error('No files were matched')
+
+  if (mode == 'e') cryptor.encryptFiles(files, envvar)
+  else if (mode == 'd') cryptor.decryptFiles(files, envvar)
   else throw new Error('Invalid mode')
 }
 

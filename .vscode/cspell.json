@@ -16,7 +16,8 @@
         "envdotenv",
 
         "setx",
-        "gloob"
+        "gloob",
+        "envvar"
     ],
     "flagWords": [
         "hte"
