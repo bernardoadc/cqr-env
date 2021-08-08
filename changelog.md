@@ -1,3 +1,4 @@
 # CHANGELOG
 
-* **[v1.0.0](/tags/v1.17.1)** - load multiple env files (js)
+* **[v1.1.0](/tags/v1.1.0)** - don't use filename as key; specify key name
+* **[v1.0.0](/tags/v1.0.0)** - load multiple env files (js/json)
