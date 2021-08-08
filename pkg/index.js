@@ -1,5 +1,4 @@
 const globby = require('globby')
-const joi = require('joi')
 /* modules */
 const loader = require('./loader')
 
@@ -12,14 +11,8 @@ function checkErrors (validationResult, name) {
 }
 
 function initialize (gloob, options = {}) {
-  const gloobSchema = joi.alternatives().try(
-    joi.array().items(joi.string().required()),
-    joi.string().required()
-  )
-  checkErrors(gloobSchema.validate(gloob), 'gloob')
-
-  const optionsSchema = require('./options.schema')
-  checkErrors(optionsSchema.validate(options), 'options') // .min(1).allow(null)
+  checkErrors(require('./gloob.schema').validate(gloob), 'gloob')
+  checkErrors(require('./options.schema').validate(options), 'options')
 
   return loader(globby.sync(gloob), options)
 }

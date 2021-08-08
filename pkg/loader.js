@@ -11,7 +11,7 @@ function loader (gloob, options) {
     if (options.name === undefined) options.name = true
     if (options.name === false) {
       const newEnv = require(path.resolve(f))
-      if (joi.object().validate(newEnv).error) throw Error('When "name" option is false, content must be an object')
+      if (joi.object().validate(newEnv).error) throw new Error('When "name" option is false, content must be an object')
       for (const k in newEnv) {
         env[k] = newEnv[k]
       }

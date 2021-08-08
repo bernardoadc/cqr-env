@@ -85,6 +85,13 @@ const env2 = { ...Default, ...pkg(`tests/B/${process.env.NODE_ENV}.env.js`, { na
 // { host: 'example.com', port: 1234})
 ```
 
+### Encrypt env files
+
+1. Add `*.exposed` to .gitignore to prevent any decrypted/unsafe files to be committed.
+2. Create a file with desired name and extension + `.exposed`. Fill sensible information.
+3. Set password key in environment variable. E.g.: `setx proj_key 1234` or `export proj_key=1234`
+4. Encrypt file(s) using `cqr-me e "gloob" "key_name"`
+
 ## Options
 
 **name** _(bool/string)_: don't use filename as root. Instead, destruct keys into parent (`false`) or give it a name (`string`).

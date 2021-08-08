@@ -1,11 +1,9 @@
 {
   "name": "cqr-me",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Have multiple env files in json/js that can be encrypted and included in version control",
   "main": "index.js",
-  "bin": {
-    "package": "./index.js"
-  },
+  "bin": "./pkg/cli.js",
   "scripts": {
     "start": "node -r esm index.js",
     "lint": "eslint --fix -f compact --ignore-path .gitignore .",
@@ -39,7 +37,8 @@
   "dependencies": {
     "esm": "^3.2.25",
     "globby": "^11.0.3",
-    "joi": "^17.4.2"
+    "joi": "^17.4.2",
+    "simple-encryptor": "^4.0.0"
   },
   "devDependencies": {
     "ava": "^3.15.0",

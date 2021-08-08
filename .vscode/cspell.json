@@ -4,6 +4,7 @@
     "words": [
         "modularization",
         "futurely",
+
         "dotenvjs",
         "alucarpd86",
         "alucarpd",
@@ -12,12 +13,16 @@
         "envdot",
         "envdotjs",
         "envdotjson",
-        "envdotenv"
+        "envdotenv",
+
+        "setx",
+        "gloob"
     ],
     "flagWords": [
         "hte"
     ],
     "enableFiletypes": [
+        "markdown",
         "!javascript",
         "!json"
     ]
