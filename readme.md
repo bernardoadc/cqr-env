@@ -22,87 +22,68 @@ This is yet another package for loading env files. After researching for npm pac
 
 ## Usage
 
-<style>
-/*
-.example {
-  column-count: 2;
-  column-rule: 1px dotted #e0e0e0
-}
-*/
-
-.folders {
-  float: left;
-  width: 40%;
-  margin-right: 10px;
-}
-
-.usage {
-  float: left;
-  width: 50%;
-}
-
-.example:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>
-
 ### Loading multiple env files (js/json)
 
-<div class="example">
-  <div class="folders">
+```js
+📂 Project
+├ 📂 modules
+│ ├ 📂 x
+│ │ └ 📄 x.env.js  // { mode: 'on' }
+│ └ 📂 y
+│   └ 📄 y.env.json  // [1, 2, 3]
+└ 📄 index.js
+```
 
-  ```js
-  📂 Project
-  ├ 📂 modules
-  │ ├ 📂 x
-  │ │ └ 📄 x.env.js  // { mode: 'on' }
-  │ └ 📂 y
-  │   └ 📄 y.env.json  // [1, 2, 3]
-  └ 📄 index.js
-  ```
+```js
+/* index.js */
+const env = require('cqr-me')(['**/*.env.js', 'tests/A/*.env.json'])
+// { x: { mode: 'on' }, y: [1, 2, 3] }
+```
 
-  </div>
-  <div class="usage">
+### Don't use filename as key / specify key name
 
-  ```js
-  /* index.js */
-  const env = require('cqr-me')(['**/*.env.js', 'tests/A/*.env.json'])
-  // { x: { mode: 'on' }, y: [1, 2, 3] }
-  ```
+```js
+📂 Project
+├ 📄 development.env.js  // { host: 'localhost' }
+├ 📄 production.env.js   // { host: 'example.com' }
+└ 📄 index.js
+```
 
-  </div>
-</div>
+```js
+/* index.js */
+console.log(process.env.NODE_ENV) // 'production'
 
-### Don't use filename as key
+const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: false )
+// { host: 'example.com' }, not { production: { host: 'example.com' }}
 
-<div class="example">
-  <div class="folders">
+const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: 'node_env' })
+// { node_env: { host: 'example.com' }}
+```
 
-  ```js
-  📂 Project
-  ├ 📄 development.env.js  // { host: 'localhost' }
-  ├ 📄 production.env.js   // { host: 'example.com' }
-  └ 📄 index.js
-  ```
+### Set defaults
 
-  </div>
-  <div class="usage">
+```js
+📂 Project
+├ 📄 default.env.js      // { host: 'localhost', port: 1234 }
+├ 📄 development.env.js  // { host: 'localhost' }
+├ 📄 production.env.js   // { host: 'example.com' }
+└ 📄 index.js
+```
 
-  ```js
-  /* index.js */
-  console.log(process.env.NODE_ENV)
-  // 'production'
-  const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: false )
-  // { host: 'example.com' }, not { production: { host: 'example.com' }}
+```js
+/* index.js */
 
-  const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: 'node_env' })
-  // { node_env: { host: 'example.com' }}
-  ```
+// default file
+process.env.NODE_ENV = ''
+const env = require('cqr-me')(`tests/B/${process.env.NODE_ENV || 'default'}.env.js`, { name: false })
+// { host: 'localhost', port: 1234 })
 
-  </div>
-</div>
+// using destructuring
+process.env.NODE_ENV = 'production'
+const Default = require('cqr-me')('tests/B/default.env.js', { name: false })
+const env2 = { ...Default, ...pkg(`tests/B/${process.env.NODE_ENV}.env.js`, { name: false }) }
+// { host: 'example.com', port: 1234})
+```
 
 ## Options
 

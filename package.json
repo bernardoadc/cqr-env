@@ -15,7 +15,25 @@
     "type": "git",
     "url": "https://github.com/bernardoadc/cqr-me"
   },
-  "keywords": [],
+  "keywords": [
+    "env",
+    ".env",
+    "environment",
+    "variables",
+    "config",
+    "settings",
+    "process.env",
+    "stages",
+    "node_env",
+    "development",
+    "test",
+    "production",
+    "local",
+    "encrypt",
+    "secure-env",
+    "encrypt-env",
+    "decrypt-env"
+  ],
   "author": "Bernardo A. Dal Corno",
   "license": "ISC",
   "dependencies": {
