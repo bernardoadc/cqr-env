@@ -36,7 +36,7 @@ This is yet another package for loading env files. After researching for npm pac
 
 ```js
 /* index.js */
-const env = require('cqr-me')(['**/*.env.js', 'tests/A/*.env.json'])
+const env = require('cqr-me')(['**/*.env.js', '**/*.env.json'])
 // { x: { mode: 'on' }, y: [1, 2, 3] }
 ```
 
@@ -75,13 +75,13 @@ const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: 'node_env' }
 
 // default file
 process.env.NODE_ENV = ''
-const env = require('cqr-me')(`tests/B/${process.env.NODE_ENV || 'default'}.env.js`, { name: false })
+const env = require('cqr-me')(`${process.env.NODE_ENV || 'default'}.env.js`, { name: false })
 // { host: 'localhost', port: 1234 })
 
 // using destructuring
 process.env.NODE_ENV = 'production'
-const Default = require('cqr-me')('tests/B/default.env.js', { name: false })
-const env2 = { ...Default, ...pkg(`tests/B/${process.env.NODE_ENV}.env.js`, { name: false }) }
+const Default = require('cqr-me')('default.env.js', { name: false })
+const env2 = { ...Default, ...pkg(`${process.env.NODE_ENV}.env.js`, { name: false }) }
 // { host: 'example.com', port: 1234})
 ```
 
