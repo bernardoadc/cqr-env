@@ -11,13 +11,15 @@ function checkErrors (validationResult, name) {
   }
 }
 
-function initialize (gloob, options) {
-  const schema = joi.alternatives().try(
+function initialize (gloob, options = {}) {
+  const gloobSchema = joi.alternatives().try(
     joi.array().items(joi.string().required()),
     joi.string().required()
   )
-  checkErrors(schema.validate(gloob), 'gloob')
-  checkErrors(joi.object().optional().validate(options), 'options') // .min(1).allow(null)
+  checkErrors(gloobSchema.validate(gloob), 'gloob')
+
+  const optionsSchema = require('./options.schema')
+  checkErrors(optionsSchema.validate(options), 'options') // .min(1).allow(null)
 
   return loader(globby.sync(gloob), options)
 }

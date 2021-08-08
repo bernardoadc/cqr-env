@@ -22,22 +22,88 @@ This is yet another package for loading env files. After researching for npm pac
 
 ## Usage
 
-Consider the following project structure:
+<style>
+/*
+.example {
+  column-count: 2;
+  column-rule: 1px dotted #e0e0e0
+}
+*/
 
-```js
-📂 Project
-├ 📂 modules
-│ ├ 📂 x
-│ │ └ 📄 x.env.js  // { mode: 'on' }
-│ └ 📂 y
-│   └ 📄 y.env.js  // [1, 2, 3]
-└ 📄 index.js
-```
+.folders {
+  float: left;
+  width: 40%;
+  margin-right: 10px;
+}
 
-Then,
+.usage {
+  float: left;
+  width: 50%;
+}
 
-```js
-/* index.js */
-const env = require('cqr-me')('**/*.env.js')
-// { x: { mode: 'on' }, y: [1, 2, 3] }
-```
+.example:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+
+### Loading multiple env files (js/json)
+
+<div class="example">
+  <div class="folders">
+
+  ```js
+  📂 Project
+  ├ 📂 modules
+  │ ├ 📂 x
+  │ │ └ 📄 x.env.js  // { mode: 'on' }
+  │ └ 📂 y
+  │   └ 📄 y.env.json  // [1, 2, 3]
+  └ 📄 index.js
+  ```
+
+  </div>
+  <div class="usage">
+
+  ```js
+  /* index.js */
+  const env = require('cqr-me')(['**/*.env.js', 'tests/A/*.env.json'])
+  // { x: { mode: 'on' }, y: [1, 2, 3] }
+  ```
+
+  </div>
+</div>
+
+### Don't use filename as key
+
+<div class="example">
+  <div class="folders">
+
+  ```js
+  📂 Project
+  ├ 📄 development.env.js  // { host: 'localhost' }
+  ├ 📄 production.env.js   // { host: 'example.com' }
+  └ 📄 index.js
+  ```
+
+  </div>
+  <div class="usage">
+
+  ```js
+  /* index.js */
+  console.log(process.env.NODE_ENV)
+  // 'production'
+  const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: false )
+  // { host: 'example.com' }, not { production: { host: 'example.com' }}
+
+  const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: 'node_env' })
+  // { node_env: { host: 'example.com' }}
+  ```
+
+  </div>
+</div>
+
+## Options
+
+**name** _(bool/string)_: don't use filename as root. Instead, destruct keys into parent (`false`) or give it a name (`string`).
