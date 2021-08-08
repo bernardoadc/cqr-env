@@ -12,7 +12,7 @@ module.exports = {
     SharedArrayBuffer: 'readonly'
   },
   parserOptions: {
-    ecmaVersion: next,
+    ecmaVersion: 2020,
     sourceType: 'module'
   },
   rules: {
