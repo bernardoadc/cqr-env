@@ -2,7 +2,7 @@ const test = require('ava')
 const pkg = require('../index')
 
 test('multiple', function (t) {
-  const env = pkg(['tests/A/*.env.js', 'tests/A/*.env.json'])
+  const env = pkg(['tests/A/*.env.js', 'tests/A/*.env.json', 'tests/A/*.env'])
   t.deepEqual(env, { x: { mode: 'on' }, y: [1, 2, 3] })
 })
 

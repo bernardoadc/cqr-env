@@ -1,5 +1,6 @@
 const fs = require('fs')
 const joi = require('joi')
+const JSON5 = require('json5')
 const path = require('path')
 /* modules */
 const cryptor = require('./cryptor')
@@ -10,12 +11,16 @@ function loadJs (data) {
 }
 
 function loadJSON (data) {
-  return JSON.parse(data)
+  return JSON5.parse(data)
 }
 
 function loadRaw (data) {
   let lastKey
+  data = data.replace(/<!-- (.+?\r*\n*)+ -->/gm, '')
+  data = data.replace(/\/\*(.+?\r*\n*)+\*\//gm, '')
   return data.split(/(?:\r?\n)+/).reduce(function (r, line) {
+    if (!line.length) return r // skip blank
+    if (/^[ \t]*[/#]+/.test(line)) return r // skip comments
     const match = line.match(/[ \t]*(.+?)[ \t]*=[ \t]*(.+?)$/)
     if (match) {
       const [m, key, value] = match
@@ -57,9 +62,8 @@ function loader (gloob, options) {
     const encrypted = (f.slice(-10) == '.encrypted')
     const ext = encrypted ? path.parse(f.replace('.env', '').replace('.encrypted', '')).ext : path.parse(f.replace('.env', '')).ext
 
-    if (options.name === undefined && ext == '') options.name = false
     if (options.name === undefined) options.name = true
-    if (options.name === false) {
+    if (options.name === false || ext == '') {
       const newEnv = load(f, ext, encrypted, options.envvar)
       if (joi.object().validate(newEnv).error) throw new Error('When "name" option is false, content must be an object')
       for (const k in newEnv) {

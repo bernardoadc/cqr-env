@@ -12,7 +12,8 @@ This is yet another package for loading env files. After researching for npm pac
   * for staging purposes (production, development, testing, local, etc)
   * for modularization - a root env, a component env, some common env (motif), "external" env (for database A, for service B, for API C)
   * to segregate sensible information from non-sensible information (like credentials)
-* multiple formats (raw/shell-like, json, js), preferably javascript (dynamic, interpreted at runtime)
+* multiple formats (raw/shell-like, json, js), including javascript (dynamic, interpreted at runtime). JSON supported by [JSON5](https://json5.org) (comments, single-quotes, line breaks, trailing commas and more)
+* special cases for raw files: multiline strings, ignore blank lines, parse as js types (numbers as numbers, objects, etc.), don't parse comments (`//`, `#`, `<!-- -->`, `/**/`)
 * encrypt sensible information
   * allowing to include in version control (otherwise when sharing projects, one should send private env files separately)
   * possibility to use encrypted env file without decrypting it (decrypt on the fly)
@@ -22,22 +23,24 @@ This is yet another package for loading env files. After researching for npm pac
 
 ## Usage
 
-### Loading multiple env files (js/json)
+### Loading multiple env files (.js, .json, raw)
 
 ```js
 📂 Project
 ├ 📂 modules
 │ ├ 📂 x
 │ │ └ 📄 x.env.js  // { mode: 'on' }
-│ └ 📂 y
-│   └ 📄 y.env.json  // [1, 2, 3]
+│ ├ 📂 y
+│ │ └ 📄 y.env.json  // [1, 2, 3]
+│ └ 📂 z
+│   └ 📄 z.env  // url=example.com
 └ 📄 index.js
 ```
 
 ```js
 /* index.js */
-const env = require('cqr-me')(['**/*.env.js', '**/*.env.json'])
-// { x: { mode: 'on' }, y: [1, 2, 3] }
+const env = require('cqr-me')(['**/*.env.js', '**/*.env.json', '**/*.env'])
+// { x: { mode: 'on' }, y: [1, 2, 3], url: 'example.com' }
 ```
 
 ### Don't use filename as key / specify key name
@@ -114,4 +117,6 @@ const env = require('cqr-me')(`${process.env.NODE_ENV}.env.js.encrypted`, { name
 
 ## Options
 
-**name** _(bool/string)_: don't use filename as root. Instead, destruct keys into parent (`false`) or give it a name (`string`).
+**envvar** _(string)_: name of the environment variable that contains the password/key to decrypt a protected file
+
+**name** _(bool/string)_: don't use filename as key. Instead, destruct keys into parent (`false`) or give it a name (`string`).
