@@ -28,3 +28,15 @@ test('defaults', function (t) {
   const env2 = { ...Default, ...pkg(`tests/B/${process.env.NODE_ENV}.env.js`, { name: false }) }
   t.deepEqual(env2, { host: 'example.com', port: 1234})
 })
+
+
+test('raw format', function (t) {
+  const env = pkg('tests/E/.env')
+  t.deepEqual(env, {
+    V: '2021-08-09T11:35:18.779Z',
+    W: 'testing\nmulti-line\nvariables',
+    X: {},
+    Y: 'a',
+    Z: 1
+  })
+})
