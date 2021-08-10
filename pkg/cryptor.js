@@ -16,11 +16,9 @@ function decrypt (file, envvar) {
 
 function encryptFiles (gloob, envvar) {
   for (const f of gloob) {
-    if (f.slice(-8) != '.exposed') throw new Error(`${f} extension is not '.exposed'`)
-
     const data = fs.readFileSync(f)
     const encrypted = encryptor(process.env[envvar] + safeSize).encrypt(data)
-    fs.writeFileSync(f.replace('.exposed', '.encrypted'), encrypted)
+    fs.writeFileSync(f.replace('.exposed', '') + '.encrypted', encrypted)
     fs.unlinkSync(f)
     console.log(`Encrypted file ${f} sucessfuly`)
   }

@@ -13,7 +13,7 @@ This is yet another package for loading env files. After researching for npm pac
   * for modularization - a root env, a component env, some common env (motif), "external" env (for database A, for service B, for API C)
   * to segregate sensible information from non-sensible information (like credentials)
 * multiple formats (raw/shell-like, json, js), including javascript (dynamic, interpreted at runtime). JSON supported by [JSON5](https://json5.org) (comments, single-quotes, line breaks, trailing commas and more)
-* special cases for raw files: multiline strings, ignore blank lines, parse as js types (numbers as numbers, objects, etc.), don't parse comments (`//`, `#`, `<!-- -->`, `/**/`)
+* special cases for raw files: multiline strings, ignore blank lines, parse as js types (numbers as numbers, objects, etc.), don't parse comments (`//`, `#`, `<!-- -->`, `/**/`) - either `//x=1` or `x=1 //2`
 * encrypt sensible information
   * allowing to include in version control (otherwise when sharing projects, one should send private env files separately)
   * possibility to use encrypted env file without decrypting it (decrypt on the fly)
@@ -83,8 +83,9 @@ const env = require('cqr-env')(`${process.env.NODE_ENV || 'default'}.env.js`, { 
 
 // using destructuring
 process.env.NODE_ENV = 'production'
-const Default = require('cqr-env')('default.env.js', { name: false })
-const env2 = { ...Default, ...pkg(`${process.env.NODE_ENV}.env.js`, { name: false }) }
+const secureEnv = require('cqr-env')
+const Default = secureEnv('default.env.js', { name: false })
+const env2 = { ...Default, ...secureEnv(`${process.env.NODE_ENV}.env.js`, { name: false }) }
 // { host: 'example.com', port: 1234})
 ```
 
@@ -92,12 +93,12 @@ const env2 = { ...Default, ...pkg(`${process.env.NODE_ENV}.env.js`, { name: fals
 
 1. Add `*.exposed` to .gitignore to prevent any decrypted/unsafe files to be committed.
 2. Create a file with desired name and extension + `.exposed`. Fill sensible information.
-3. Set password key in environment variable. E.g.: `setx proj_key 1234` or `export proj_key=1234`
-4. Encrypt file(s) using `cqr-env e "gloob" "key_name"` (files must end with .exposed)
+3. Set password key in environment variable. E.g.: `setx proj_key 1234` or `export proj_key=1234`. You can use multiple password keys as you like - just create one env var for each.
+4. Encrypt file(s) using `cqr-env -e "gloob" "key_name"`
 
 ### Decrypt env files (for editing)
 
-1. Decrypt file(s) using `cqr-env d "gloob" "key_name"` (files must end with .encrypted)
+1. Decrypt file(s) using `cqr-env -d "gloob" "key_name"` (files must end with .encrypted)
 
 ### Decrypt and load env files on-the-fly
 
@@ -111,8 +112,12 @@ const env2 = { ...Default, ...pkg(`${process.env.NODE_ENV}.env.js`, { name: fals
 /* index.js */
 console.log(process.env.NODE_ENV) // 'production'
 
-const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, envvar: 'key_name' } )
+const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, envvar: 'key_name' })
 // { host: 'example.com', pw: 'abcde' }
+
+// if options is a string, it will be considered to be the password key
+const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, 'key_name')
+// { production: { host: 'example.com', pw: 'abcde' }}
 ```
 
 ## Options

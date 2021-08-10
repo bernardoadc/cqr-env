@@ -1,9 +1,9 @@
 {
   "name": "cqr-env",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Have multiple env files that can be encrypted and included in version control",
   "main": "index.js",
-  "bin": "./pkg/cli.js",
+  "bin": "cli.js",
   "scripts": {
     "start": "node -r esm index.js",
     "lint": "eslint --fix -f compact --ignore-path .gitignore .",

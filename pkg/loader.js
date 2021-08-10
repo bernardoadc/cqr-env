@@ -16,11 +16,17 @@ function loadJSON (data) {
 
 function loadRaw (data) {
   let lastKey
+
+  /* skip multiline comments */
   data = data.replace(/<!-- (.+?\r*\n*)+ -->/gm, '')
   data = data.replace(/\/\*(.+?\r*\n*)+\*\//gm, '')
+
   return data.split(/(?:\r?\n)+/).reduce(function (r, line) {
+    /* skip singleline comments */
+    line = line.replace(/[ \t]*\/\/.*$/g, '') // this allows "x=1 // 2"
+    line = line.replace(/[ \t]*#.*$/g, '')
     if (!line.length) return r // skip blank
-    if (/^[ \t]*[/#]+/.test(line)) return r // skip comments
+
     const match = line.match(/[ \t]*(.+?)[ \t]*=[ \t]*(.+?)$/)
     if (match) {
       const [m, key, value] = match

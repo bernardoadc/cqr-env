@@ -3,7 +3,7 @@ const pkg = require('../index')
 
 test('multiple', function (t) {
   const env = pkg(['tests/A/*.env.js', 'tests/A/*.env.json', 'tests/A/*.env'])
-  t.deepEqual(env, { x: { mode: 'on' }, y: [1, 2, 3] })
+  t.deepEqual(env, { x: { mode: 'on' }, y: [1, 2, 3], url: 'example.com' })
 })
 
 test('options.name = false', function (t) {
@@ -28,7 +28,6 @@ test('defaults', function (t) {
   const env2 = { ...Default, ...pkg(`tests/B/${process.env.NODE_ENV}.env.js`, { name: false }) }
   t.deepEqual(env2, { host: 'example.com', port: 1234})
 })
-
 
 test('raw format', function (t) {
   const env = pkg('tests/E/.env')

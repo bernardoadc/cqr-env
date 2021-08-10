@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* **[v1.6.0](../../releases/tag/v1.6.0)** - options as string = envvar + some minor enhancements
 * **[v1.5.0](../../releases/tag/v1.5.0)** - skip comments (raw + json with JSON5)
 * **[v1.4.0](../../releases/tag/v1.4.0)** - load raw .env files
 * **[v1.3.0](../../releases/tag/v1.3.0)** - decrypt and load env file on-the-fly (MVP)

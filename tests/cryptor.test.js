@@ -12,7 +12,7 @@ test.serial.cb('encrypt new sensible env file', function (t) {
   // create new file
   fs.writeFileSync('tests/C/password.env.js.exposed', 'module.exports = "secret password!"')
   // encrypt file via CLI
-  const s = spawn('node', ['./pkg/cli.js', 'e', 'tests/C/password.env.js.exposed', 'cqr_key'])
+  const s = spawn('node', ['./cli.js', '-e', 'tests/C/password.env.js.exposed', 'cqr_key'])
 
   s.on('close', function (code) {
     t.false(fs.existsSync('tests/C/password.env.js.exposed'))
@@ -24,7 +24,7 @@ test.serial.cb('encrypt new sensible env file', function (t) {
 
 test.serial.cb('decrypt env file', function (t) {
   // decrypt file via CLI
-  const s = spawn('node', ['./pkg/cli.js', 'd', 'tests/C/password.env.js.encrypted', 'cqr_key'])
+  const s = spawn('node', ['./cli.js', '-d', 'tests/C/password.env.js.encrypted', 'cqr_key'])
 
   s.on('close', function (code) {
     t.false(fs.existsSync('tests/C/password.env.js.encrypted'))
@@ -38,5 +38,11 @@ test.serial.cb('decrypt env file', function (t) {
 test('use secret env file', function (t) {
   const pkg = require('../index')
   const env = pkg('tests/D/production.env.js.encrypted', { envvar: 'cqr_key' })
+  t.deepEqual(env, { production: { host: 'example.com', pw: 'abcde' }})
+})
+
+test('use secret env file, options as string', function (t) {
+  const pkg = require('../index')
+  const env = pkg('tests/D/production.env.js.encrypted', 'cqr_key')
   t.deepEqual(env, { production: { host: 'example.com', pw: 'abcde' }})
 })
