@@ -1,8 +1,8 @@
-# CQr-ME
+# CQr-env
 
 > Secured Multiple Env Files
 
-Have multiple env files in json/js that can be encrypted and included in version control (_e.g._ git)
+Have multiple env files that can be encrypted and included in version control (_e.g._ git)
 
 ## Motivation
 
@@ -39,7 +39,7 @@ This is yet another package for loading env files. After researching for npm pac
 
 ```js
 /* index.js */
-const env = require('cqr-me')(['**/*.env.js', '**/*.env.json', '**/*.env'])
+const env = require('cqr-env')(['**/*.env.js', '**/*.env.json', '**/*.env'])
 // { x: { mode: 'on' }, y: [1, 2, 3], url: 'example.com' }
 ```
 
@@ -56,10 +56,10 @@ const env = require('cqr-me')(['**/*.env.js', '**/*.env.json', '**/*.env'])
 /* index.js */
 console.log(process.env.NODE_ENV) // 'production'
 
-const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: false })
+const env = require('cqr-env')(`${process.env.NODE_ENV}.js`, { name: false })
 // { host: 'example.com' }, not { production: { host: 'example.com' }}
 
-const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: 'node_env' })
+const env = require('cqr-env')(`${process.env.NODE_ENV}.js`, { name: 'node_env' })
 // { node_env: { host: 'example.com' }}
 ```
 
@@ -78,12 +78,12 @@ const env = require('cqr-me')(`${process.env.NODE_ENV}.js`, { name: 'node_env' }
 
 // default file
 process.env.NODE_ENV = ''
-const env = require('cqr-me')(`${process.env.NODE_ENV || 'default'}.env.js`, { name: false })
+const env = require('cqr-env')(`${process.env.NODE_ENV || 'default'}.env.js`, { name: false })
 // { host: 'localhost', port: 1234 })
 
 // using destructuring
 process.env.NODE_ENV = 'production'
-const Default = require('cqr-me')('default.env.js', { name: false })
+const Default = require('cqr-env')('default.env.js', { name: false })
 const env2 = { ...Default, ...pkg(`${process.env.NODE_ENV}.env.js`, { name: false }) }
 // { host: 'example.com', port: 1234})
 ```
@@ -93,11 +93,11 @@ const env2 = { ...Default, ...pkg(`${process.env.NODE_ENV}.env.js`, { name: fals
 1. Add `*.exposed` to .gitignore to prevent any decrypted/unsafe files to be committed.
 2. Create a file with desired name and extension + `.exposed`. Fill sensible information.
 3. Set password key in environment variable. E.g.: `setx proj_key 1234` or `export proj_key=1234`
-4. Encrypt file(s) using `cqr-me e "gloob" "key_name"` (files must end with .exposed)
+4. Encrypt file(s) using `cqr-env e "gloob" "key_name"` (files must end with .exposed)
 
 ### Decrypt env files (for editing)
 
-1. Decrypt file(s) using `cqr-me d "gloob" "key_name"` (files must end with .encrypted)
+1. Decrypt file(s) using `cqr-env d "gloob" "key_name"` (files must end with .encrypted)
 
 ### Decrypt and load env files on-the-fly
 
@@ -111,7 +111,7 @@ const env2 = { ...Default, ...pkg(`${process.env.NODE_ENV}.env.js`, { name: fals
 /* index.js */
 console.log(process.env.NODE_ENV) // 'production'
 
-const env = require('cqr-me')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, envvar: 'key_name' } )
+const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, envvar: 'key_name' } )
 // { host: 'example.com', pw: 'abcde' }
 ```
 
