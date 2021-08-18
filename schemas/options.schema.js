@@ -8,5 +8,6 @@ module.exports = joi.alternatives().try(
     ).optional(),
     envvar: require('./envvar.schema').optional()
   }),
-  require('./envvar.schema')
+  require('./envvar.schema'),
+  joi.boolean()
 ).optional()

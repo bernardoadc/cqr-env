@@ -114,14 +114,10 @@ console.log(process.env.NODE_ENV) // 'production'
 
 const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, envvar: 'key_name' })
 // { host: 'example.com', pw: 'abcde' }
-
-// if options is a string, it will be considered to be the password key
-const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, 'key_name')
-// { production: { host: 'example.com', pw: 'abcde' }}
 ```
 
 ## Options
 
-**envvar** _(string)_: name of the environment variable that contains the password/key to decrypt a protected file
+**envvar** _(string)_: name of the environment variable that contains the password/key to decrypt a protected file. If options is a string, it will be considered to be the envvar
 
-**name** _(bool/string)_: don't use filename as key. Instead, destruct keys into parent (`false`) or give it a name (`string`).
+**name** _(bool/string)_: don't use filename as key. Instead, destruct keys into parent (`false`) or give it a name (`string`). If options is boolean (`false`), it will be considered to be `name: false`

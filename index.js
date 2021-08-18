@@ -18,6 +18,7 @@ function initialize (gloob, options = {}) {
   if (!files.length) throw new Error('No files were matched')
 
   if (typeof options == 'string') options = { envvar: options }
+  if (typeof options == 'boolean') options = { name: options }
 
   return loader(files, options)
 }
