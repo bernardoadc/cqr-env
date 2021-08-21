@@ -9,17 +9,17 @@ test.before(function (t) {
 })
 
 test.serial('glob sanitization', function (t) {
-  const file = 'tests/C/password.env.js.exposed'
+  const file = 'tests/G/password.env.js.exposed'
 
   fs.writeFileSync(file, 'a=b')
-  t.notThrows(() => spawnSync('node', ['./cli.js', '-e', 'tests/C/password.env.js.exposed', 'cqr_key']))
+  t.notThrows(() => spawnSync('node', ['./cli.js', '-e', 'tests/G/password.env.js.exposed', '-v', 'cqr_key']))
   fs.unlinkSync(file.replace('.exposed', '.encrypted'))
 
   fs.writeFileSync(file, 'a=b')
-  t.notThrows(() => spawnSync('node', ['./cli.js', '-e', 'tests\\C\\password.env.js.exposed', 'cqr_key']))
+  t.notThrows(() => spawnSync('node', ['./cli.js', '-e', 'tests\\G\\password.env.js.exposed', '-v', 'cqr_key']))
   fs.unlinkSync(file.replace('.exposed', '.encrypted'))
 
   fs.writeFileSync(file, 'a=b')
-  t.notThrows(() => spawnSync('node', ['./cli.js', '-e', 'tests\\C/password.env.js.exposed', 'cqr_key']))
+  t.notThrows(() => spawnSync('node', ['./cli.js', '-e', 'tests\\G/password.env.js.exposed', '-v', 'cqr_key']))
   fs.unlinkSync(file.replace('.exposed', '.encrypted'))
 })

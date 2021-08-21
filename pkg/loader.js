@@ -44,12 +44,12 @@ function loadRaw (data) {
   }, {})
 }
 
-function load (file, ext, encrypted, envvar) {
+function load (file, ext, encrypted, key) {
   let data
 
   if (encrypted) {
-    if (!envvar) throw new Error('Envvar not informed for encrypted env file')
-    data = cryptor.decrypt(file, envvar)
+    if (!key.value) throw new Error('Envvar not informed for encrypted env file')
+    data = cryptor.decrypt(file, key.medium, key.value)
   } else {
     data = Buffer.from(fs.readFileSync(file)).toString()
   }
@@ -61,22 +61,37 @@ function load (file, ext, encrypted, envvar) {
   }
 }
 
+function getKey (options) {
+  if (options.envvar) {
+    return {
+      medium: 'var',
+      value: options.envvar
+    }
+  } else if (options.pwfile) {
+    return {
+      medium: 'file',
+      value: options.pwfile
+    }
+  }
+}
+
 function loader (gloob, options) {
   const env = {}
 
   for (const f of gloob) {
     const encrypted = (f.slice(-10) == '.encrypted')
     const ext = encrypted ? path.parse(f.replace('.env', '').replace('.encrypted', '')).ext : path.parse(f.replace('.env', '')).ext
+    const key = getKey(options)
 
     if (options.name === false || ext == '') {
-      const newEnv = load(f, ext, encrypted, options.envvar)
+      const newEnv = load(f, ext, encrypted, key)
       if (joi.object().validate(newEnv).error) throw new Error('When "name" option is false, content must be an object')
       for (const k in newEnv) {
         env[k] = newEnv[k]
       }
     } else {
       const name = (typeof options.name == 'string') ? options.name : path.basename(f).split('.')[0]
-      env[name] = load(f, ext, encrypted, options.envvar)
+      env[name] = load(f, ext, encrypted, key)
     }
   }
 

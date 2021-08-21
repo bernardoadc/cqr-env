@@ -1,6 +1,6 @@
 {
   "name": "cqr-env",
-  "version": "1.7.1",
+  "version": "2.0.0",
   "description": "Have multiple env files that can be encrypted and included in version control",
   "main": "index.js",
   "bin": "cli.js",

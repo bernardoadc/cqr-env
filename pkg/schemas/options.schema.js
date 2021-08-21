@@ -6,7 +6,8 @@ module.exports = joi.alternatives().try(
       joi.boolean(),
       joi.string().required()
     ).optional(),
-    envvar: require('./envvar.schema').optional()
+    envvar: require('./envvar.schema').optional(),
+    pwfile: require('./pwfile.schema').optional()
   }), // .optional().min(1)
   joi.string().required(), // envvar
   joi.boolean() // name

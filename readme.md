@@ -93,12 +93,14 @@ const env2 = { ...Default, ...secureEnv(`${process.env.NODE_ENV}.env.js`, { name
 
 1. Add `*.exposed` to .gitignore to prevent any decrypted/unsafe files to be committed.
 2. Create a file with desired name and extension + `.exposed`. Fill sensible information.
-3. Set password key in environment variable. E.g.: `setx proj_key 1234` or `export proj_key=1234`. You can use multiple password keys as you like - just create one env var for each.
-4. Encrypt file(s) using `cqr-env -e "gloob" "key_name"`
+3. Set password key in environment variable. _E.g._: `setx proj_key 1234` or `export proj_key=1234`. You can use multiple password keys as you like - just create one env var for each.
+4. Encrypt file(s) using `cqr-env -e "gloob" -v "key_name"`
+
+> Execute cqr-env via npx, [npm exec or npm x](https://docs.npmjs.com/cli/v7/commands/npm-exec), or simply via npm scripts (_e.g._ `npm run command` with command in `package.json` scripts)
 
 ### Decrypt env files (for editing)
 
-1. Decrypt file(s) using `cqr-env -d "gloob" "key_name"` (files must end with .encrypted)
+1. Decrypt file(s) using `cqr-env -d "gloob" -v "key_name"` (files must end with .encrypted)
 
 ### Decrypt and load env files on-the-fly
 
@@ -116,8 +118,29 @@ const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { nam
 // { host: 'example.com', pw: 'abcde' }
 ```
 
+### Storing keys in files instead of environment variables
+
+While this is discouraged, sometimes the environment variables aren't acessible and thus this provides an alternative method.
+
+1. Create a file with password key inside
+2. Add to .gitignore to prevent to be committed.
+3. Encrypt file(s) using `cqr-env -e "gloob" -f path/to/file`
+4. Decrypt file(s) using `cqr-env -d "gloob" -f path/to/file` (for editing)
+5. To decrypt and load env files on-the-fly, do:
+
+```js
+/* index.js */
+console.log(process.env.NODE_ENV) // 'production'
+
+const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, pwfile: 'path/to/file' })
+// { host: 'example.com', pw: 'abcde' }
+```
+
+
 ## Options
 
-**envvar** _(string)_: name of the environment variable that contains the password/key to decrypt a protected file. If options is a string, it will be considered to be the envvar
+**envvar** _(string)_: name of the environment variable that contains the password/key to decrypt a protected file. If options is a string, it will be considered to be the envvar.
 
-**name** _(bool/string)_: don't use filename as key. Instead, destruct keys into parent (`false`) or give it a name (`string`). If options is boolean (`false`), it will be considered to be `name: false`
+**name** _(bool/string)_: don't use filename as key. Instead, destruct keys into parent (`false`) or give it a name (`string`). If options is boolean (`false`), it will be considered to be `name: false`.
+
+**pwfile** _(string)_: path of the file that contains the password/key to decrypt a protected file.
