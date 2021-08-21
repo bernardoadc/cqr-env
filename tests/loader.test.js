@@ -18,6 +18,12 @@ test('options.name = "name"', function (t) {
   t.deepEqual(env, { node_env: { host: 'localhost' }})
 })
 
+test('options = false', function (t) {
+  process.env.NODE_ENV = 'development'
+  const env = pkg(`tests/B/${process.env.NODE_ENV}.env.js`, false)
+  t.deepEqual(env, { host: 'localhost' })
+})
+
 test('defaults', function (t) {
   process.env.NODE_ENV = ''
   const env = pkg(`tests/B/${process.env.NODE_ENV || 'default'}.env.js`, { name: false })

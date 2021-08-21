@@ -68,7 +68,6 @@ function loader (gloob, options) {
     const encrypted = (f.slice(-10) == '.encrypted')
     const ext = encrypted ? path.parse(f.replace('.env', '').replace('.encrypted', '')).ext : path.parse(f.replace('.env', '')).ext
 
-    if (options.name === undefined) options.name = true
     if (options.name === false || ext == '') {
       const newEnv = load(f, ext, encrypted, options.envvar)
       if (joi.object().validate(newEnv).error) throw new Error('When "name" option is false, content must be an object')
