@@ -45,6 +45,8 @@ const env = require('cqr-env')(['**/*.env.js', '**/*.env.json', '**/*.env'])
 
 ### Don't use filename as key / specify key name
 
+> Obs: If a single file is loaded, `name` by default is false
+
 ```js
 📂 Project
 ├ 📄 development.env.js  // { host: 'localhost' }
@@ -56,7 +58,7 @@ const env = require('cqr-env')(['**/*.env.js', '**/*.env.json', '**/*.env'])
 /* index.js */
 console.log(process.env.NODE_ENV) // 'production'
 
-const env = require('cqr-env')(`${process.env.NODE_ENV}.js`, { name: false })
+const env = require('cqr-env')(`${process.env.NODE_ENV}.js`) // implies { name: false }
 // { host: 'example.com' }, not { production: { host: 'example.com' }}
 
 const env = require('cqr-env')(`${process.env.NODE_ENV}.js`, { name: 'node_env' })
@@ -78,14 +80,14 @@ const env = require('cqr-env')(`${process.env.NODE_ENV}.js`, { name: 'node_env' 
 
 // default file
 process.env.NODE_ENV = ''
-const env = require('cqr-env')(`${process.env.NODE_ENV || 'default'}.env.js`, { name: false })
+const env = require('cqr-env')(`${process.env.NODE_ENV || 'default'}.env.js`)
 // { host: 'localhost', port: 1234 })
 
 // using destructuring
 process.env.NODE_ENV = 'production'
 const secureEnv = require('cqr-env')
-const Default = secureEnv('default.env.js', { name: false })
-const env2 = { ...Default, ...secureEnv(`${process.env.NODE_ENV}.env.js`, { name: false }) }
+const Default = secureEnv('default.env.js')
+const env2 = { ...Default, ...secureEnv(`${process.env.NODE_ENV}.env.js`) }
 // { host: 'example.com', port: 1234})
 ```
 
@@ -114,7 +116,7 @@ const env2 = { ...Default, ...secureEnv(`${process.env.NODE_ENV}.env.js`, { name
 /* index.js */
 console.log(process.env.NODE_ENV) // 'production'
 
-const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, envvar: 'key_name' })
+const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, 'key_name')
 // { host: 'example.com', pw: 'abcde' }
 ```
 
@@ -132,7 +134,7 @@ While this is discouraged, sometimes the environment variables aren't acessible 
 /* index.js */
 console.log(process.env.NODE_ENV) // 'production'
 
-const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { name: false, pwfile: 'path/to/file' })
+const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { pwfile: 'path/to/file' })
 // { host: 'example.com', pw: 'abcde' }
 ```
 
@@ -141,6 +143,6 @@ const env = require('cqr-env')(`${process.env.NODE_ENV}.env.js.encrypted`, { nam
 
 **envvar** _(string)_: name of the environment variable that contains the password/key to decrypt a protected file. If options is a string, it will be considered to be the envvar.
 
-**name** _(bool/string)_: don't use filename as key. Instead, destruct keys into parent (`false`) or give it a name (`string`). If options is boolean (`false`), it will be considered to be `name: false`.
+**name** _(bool/string)_: use filename as key. `false` destruct keys into parent and `string` give it a name. If not set, default is `false` for single file and `true` for multiple files. If options is boolean, it will be considered to be `name`.
 
 **pwfile** _(string)_: path of the file that contains the password/key to decrypt a protected file.

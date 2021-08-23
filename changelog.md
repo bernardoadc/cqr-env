@@ -1,5 +1,6 @@
 # CHANGELOG
 
+* **[v2.1.0](../../releases/tag/v2.1.0)** - name by default is `false` for single file and `true` for multiple files
 * **[v2.0.0](../../releases/tag/v2.0.0)** - pwfile. Breaking change: cli arguments
 * **[v1.7.0](../../releases/tag/v1.7.0)** - options as boolean = name
 * **[v1.6.0](../../releases/tag/v1.6.0)** - options as string = envvar + some minor enhancements

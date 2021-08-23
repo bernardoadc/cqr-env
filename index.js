@@ -18,7 +18,7 @@ function initialize (gloob, options = {}) {
 
   if (typeof options == 'string') options = { envvar: options }
   if (typeof options == 'boolean') options = { name: options }
-  if (options.name === undefined) options.name = true
+  if (options.name === undefined) options.name = (files.length > 1)
 
 
   return loader(files, options)
